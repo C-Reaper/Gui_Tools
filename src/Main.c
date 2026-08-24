@@ -39,7 +39,12 @@ void ProgressBar_React(ProgressBarEvent* be,ProgressBar* b){
 Scene scene;
 
 void Setup(AlxWindow* w){
-    scene = Scene_New();
+    scene = Scene_New(
+        NULL,
+        (Rect){ 0.0f,0.0f,(float)w->Width,(float)w->Height },
+        BLACK
+    );
+    
     Scene_Add(&scene,(Button[]){ Button_New(    NULL,"Click Me",(void*)Button_React,            AlxFont_New(ALXFONT_BLOCKY),(Vec2){16.0f,16.0f},(Rect){ {100.0f,100.0f},{400.0f,200.0f} },ALIGN_HORI_CENTER | ALIGN_VERT_CENTER,WHITE,RED) },sizeof(Button));
     Scene_Add(&scene,(Button[]){ Button_NewStd( NULL,"Click Me",(void*)Button_React,            (Vec2){25.0f,25.0f},(Rect){ {200.0f,200.0f},{400.0f,200.0f} },WHITE,RED) },sizeof(Button));
     Scene_Add(&scene,(Label[]){ Label_NewStd(   NULL,"Label Me",(void*)Label_React,             (Vec2){25.0f,25.0f},(Rect){ {300.0f,400.0f},{400.0f,200.0f} },WHITE,RED) },sizeof(Label));
@@ -47,7 +52,9 @@ void Setup(AlxWindow* w){
 }
 
 void Update(AlxWindow* w){
-    Scene_Update(&scene,window.Strokes,GetMouse(),GetMouseBefore());
+    Scene_Adapt(&scene,GetWidth(),GetHeight());
+    Scene_Update(&scene);
+    Scene_Input(&scene,window.Strokes,GetMouse(),GetMouseBefore());
     
     Clear(BLUE);
     Scene_Render(WINDOW_STD_ARGS,&scene);
